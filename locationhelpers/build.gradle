@@ -60,9 +60,3 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:17.0.0'
     implementation 'com.google.maps.android:android-maps-utils:0.6.2'
 }
-
-repositories {
-    google()
-    jcenter()
-    mavenCentral()
-}

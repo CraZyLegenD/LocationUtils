@@ -5,6 +5,7 @@
 
 ### Android location extensions and helper classes
 
+[![](https://jitpack.io/v/CraZyLegenD/LocationUtils.svg)](https://jitpack.io/#CraZyLegenD/LocationUtils)
 [![Kotlin](https://img.shields.io/badge/Kotlin-1.3.72-blue.svg)](https://kotlinlang.org) 
 
 Minimum Android API 21

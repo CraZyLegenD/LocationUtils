@@ -6,6 +6,7 @@
 ### Android location extensions and helper classes
 
 [![Kotlin](https://img.shields.io/badge/Kotlin-1.3.72-blue.svg)](https://kotlinlang.org) 
+
 Minimum Android API 21
 
 Compiled Android API 29

@@ -6,9 +6,14 @@ import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
+import com.google.android.gms.maps.model.PolylineOptions
+import com.google.maps.android.data.geojson.GeoJsonFeature
+import com.google.maps.android.data.geojson.GeoJsonLayer
+import com.google.maps.android.data.geojson.GeoJsonLineString
+import org.json.JSONObject
 
 
 /**
@@ -34,3 +39,45 @@ fun Context.getCompatDrawable(@DrawableRes drawableRes: Int): Drawable? =
         ContextCompat.getDrawable(this, drawableRes)
 
 
+fun buildGeoJSONLayer(map: GoogleMap, geoJson: String) = GeoJsonLayer(map, JSONObject(geoJson))
+
+fun buildLayerFromGeoJSONAndAddToMap(map: GoogleMap, geoJson: String) {
+    val layer = buildGeoJSONLayer(map, geoJson)
+    layer.addLayerToMap()
+}
+
+fun buildLayerFromGeoJSONAndAddToMapWithBoundingBox(map: GoogleMap, geoJson: String, onLatLngBounds: LatLngBounds.() -> Unit = {}) {
+    val layer = buildGeoJSONLayer(map, geoJson)
+    layer.addLayerToMap()
+    buildBoundingBox(layer.features, onLatLngBounds)
+}
+
+inline fun List<LatLng>.toPolyLines(polyLineBuilder: PolylineOptions.() -> Unit = {}) = PolylineOptions()
+        .addAll(this).polyLineBuilder()
+
+inline fun buildBoundingBox(features: Iterable<GeoJsonFeature>, onLatLngBounds: LatLngBounds.() -> Unit = {}) {
+    // Get the bounding box builder.
+    val builder = LatLngBounds.builder()
+
+    // Get the Coordinates
+    for (feature in features) {
+        if (feature.hasGeometry()) {
+            val geometry = feature.geometry
+
+            val lists = (geometry as GeoJsonLineString).coordinates
+            // Feed the Coordinates to the builder.
+            for (latLng in lists) {
+                builder.include(latLng)
+            }
+        }
+    }
+
+    // Assign the builder's return value to a bounding box.
+    val bb = builder.build()
+
+    bb?.apply {
+        this.onLatLngBounds()
+    }
+
+
+}

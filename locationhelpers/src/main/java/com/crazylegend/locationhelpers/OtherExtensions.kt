@@ -6,6 +6,9 @@ import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.model.LatLng
 
 
 /**
@@ -29,3 +32,5 @@ fun Context.getBitmapFromResource(drawableRes: Int): Bitmap? {
 
 fun Context.getCompatDrawable(@DrawableRes drawableRes: Int): Drawable? =
         ContextCompat.getDrawable(this, drawableRes)
+
+

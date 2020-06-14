@@ -1,5 +1,6 @@
 package com.crazylegend.locationhelpers
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -34,7 +35,7 @@ val Context.fusedLocationProvider get() = FusedLocationProviderClient(this)
 
 val Activity.fusedLocationProvider get() = FusedLocationProviderClient(this)
 
-fun fusedLocationCallback(callbackResult: (locationResult: LocationResult, lastLocation: Location) -> Unit = { _, _ -> }): LocationCallback =
+inline fun fusedLocationCallback(crossinline callbackResult: (locationResult: LocationResult, lastLocation: Location) -> Unit = { _, _ -> }): LocationCallback =
     object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
             super.onLocationResult(locationResult)
@@ -44,11 +45,11 @@ fun fusedLocationCallback(callbackResult: (locationResult: LocationResult, lastL
     }
 
 
-fun LocationRequest.setup(
-    context: Context,
-    onError: (Exception) -> Unit = {},
-    resolvableApiException: (ResolvableApiException) -> Unit = {},
-    onSuccess: (response: LocationSettingsResponse) -> Unit = {}
+inline fun LocationRequest.setup(
+        context: Context,
+        crossinline onError: (Exception) -> Unit = {},
+        crossinline resolvableApiException: (ResolvableApiException) -> Unit = {},
+        crossinline onSuccess: (response: LocationSettingsResponse) -> Unit = {}
 ) {
     val builder = LocationSettingsRequest.Builder()
         .addLocationRequest(this)
@@ -76,6 +77,7 @@ fun LocationRequest.setup(
     }
 }
 
+@SuppressLint("MissingPermission")
 fun FusedLocationProviderClient.startLocationUpdates(
     locationRequest: LocationRequest,
     locationCallback: LocationCallback
@@ -87,7 +89,8 @@ fun FusedLocationProviderClient.stopLocationUpdates(locationCallback: LocationCa
     removeLocationUpdates(locationCallback)
 }
 
-fun FusedLocationProviderClient.lastLocation(callback:(Location)->Unit){
+@SuppressLint("MissingPermission")
+inline fun FusedLocationProviderClient.lastLocation(crossinline callback:(Location)->Unit){
     lastLocation.addOnCompleteListener {
         val result = it.result
         result?.apply {
@@ -106,6 +109,9 @@ fun AppCompatActivity.enableGPS(requestCode: Int? = null) {
         }
     }
 }
+
+fun enableGPSIntent() = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+
 
 fun Context.enableGPS() {
     if (!isLocationEnabled) {

@@ -60,7 +60,7 @@ fun locationListenerDSL(
         locationChanged: (location: Location?) -> Unit = { _ -> }
 ): LocationListener {
     return object : LocationListener {
-        override fun onLocationChanged(location: Location?) {
+        override fun onLocationChanged(location: Location) {
             locationChanged(location)
         }
 
@@ -68,11 +68,11 @@ fun locationListenerDSL(
             statusChanged(provider, status, extras)
         }
 
-        override fun onProviderEnabled(provider: String?) {
+        override fun onProviderEnabled(provider: String) {
             providerEnabled(provider)
         }
 
-        override fun onProviderDisabled(provider: String?) {
+        override fun onProviderDisabled(provider: String) {
             providerDisabled(provider)
         }
     }

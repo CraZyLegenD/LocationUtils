@@ -22,9 +22,9 @@ abstract class IconVectorClusterRenderer<T : ClusterItem>(
 
     abstract val drawableID: Int
 
-    override fun onBeforeClusterRendered(cluster: Cluster<T>?, markerOptions: MarkerOptions?) {
+    override fun onBeforeClusterItemRendered(item: T, markerOptions: MarkerOptions) {
         val icon = BitmapDescriptorFactory.fromBitmap(context.getBitmapFromResource(drawableID))
-        markerOptions?.icon(icon)
+        markerOptions.icon(icon)
     }
 
 }

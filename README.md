@@ -7,10 +7,9 @@
 
 [![](https://jitpack.io/v/CraZyLegenD/LocationUtils.svg)](https://jitpack.io/#CraZyLegenD/LocationUtils)
 [![Kotlin](https://img.shields.io/badge/Kotlin-1.3.72-blue.svg)](https://kotlinlang.org) 
+![API](https://img.shields.io/badge/Min%20API-21-green)
+![API](https://img.shields.io/badge/Compiled%20API-30-green)
 
-Minimum Android API 21
-
-Compiled Android API 30
 
 ## Usage
 1. Add JitPack to your project build.gradle

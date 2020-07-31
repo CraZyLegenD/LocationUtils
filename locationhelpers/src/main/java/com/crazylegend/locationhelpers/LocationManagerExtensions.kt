@@ -2,12 +2,17 @@ package com.crazylegend.locationhelpers
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
+import android.provider.Settings
 import androidx.annotation.RequiresPermission
+import androidx.core.location.LocationManagerCompat
 
 
 /**
@@ -76,4 +81,38 @@ fun locationListenerDSL(
             providerDisabled(provider)
         }
     }
+}
+
+/**
+ * Checks if high accuracy is enabled
+ * @receiver Context
+ * @return Int -1 if isn't enabled, 3 if is enabled, other values aren't high accuracy
+ */
+fun Context.isHighAccuracyEnabled(): Int {
+    var locationMode: Int = -1
+    try {
+        val locationManager = locationManager ?: return -1
+        LocationManagerCompat.isLocationEnabled(locationManager)
+        locationMode = Settings.Secure.getInt(contentResolver, Settings.Secure.LOCATION_MODE)
+    } catch (e: Settings.SettingNotFoundException) {
+        e.printStackTrace()
+    }
+    locationMode != Settings.Secure.LOCATION_MODE_OFF && locationMode == Settings.Secure.LOCATION_MODE_HIGH_ACCURACY //check location mode
+    return locationMode
+}
+
+fun locationModeChangedIntent() = IntentFilter(LocationManager.MODE_CHANGED_ACTION)
+
+inline fun listenForLocationModeChanges(crossinline onNewLocationStatus: (Intent) -> Unit) = object : BroadcastReceiver() {
+    override fun onReceive(context: Context?, intent: Intent?) {
+        if (LocationManager.MODE_CHANGED_ACTION == intent?.action) {
+            onNewLocationStatus(intent)
+        }
+    }
+}
+
+inline fun Context.registerLocationModeReceiver(crossinline onNewLocationStatus: (Intent) -> Unit): BroadcastReceiver {
+    val receiver = listenForLocationModeChanges(onNewLocationStatus)
+    registerReceiver(receiver, locationModeChangedIntent())
+    return receiver
 }

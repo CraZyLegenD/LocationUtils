@@ -126,7 +126,7 @@ val Context.isLocationEnabled: Boolean
     ) ?: false
 
 
-fun fusedLocationResultCallback(locResult: (locRes: LocationResult) -> Unit = { _ -> }): LocationCallback? {
+inline fun fusedLocationResultCallback(crossinline locResult: (locRes: LocationResult) -> Unit = { _ -> }): LocationCallback? {
     return object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
             locResult(locationResult)

@@ -1,13 +1,13 @@
 buildscript {
     ext.kotlin_version = '1.4.10'
-    ext.mapUtilsVersion = '2.0.3'
+    ext.mapUtilsVersion = '2.0.4'
     ext.mapsVersion = '17.0.0'
     repositories {
         google()
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.0.1'
+        classpath 'com.android.tools.build:gradle:4.1.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
